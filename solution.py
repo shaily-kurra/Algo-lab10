@@ -43,13 +43,13 @@ weights = [1,1,1,1]
 list_of_probs = []
 for in in range(T):
     probs = probs_from_weights(weights)
-    list_of_probs.append(probs)
+    list_of_probs.extend(probs)
     response = best_response(probs)
     utilities = util_of_each_action(response)
     losses = convert_util_to_losses(utilities)
     weights = update_weights(weights, losses, epsilon)
 
-
+return sum(list_of_probs)/len(list_of_probs)
 
 
 
