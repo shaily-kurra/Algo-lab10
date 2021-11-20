@@ -8,40 +8,43 @@ def probs_from_weights(weights):
 def best_response(probs):
     payoffs = [-0.5,0.5,-0.5,0.5]
     exp_utility = []
-    exp_utility.append(payoffs*probs)
+    for i,j in zip(payoffs,probs):
+        exp_utility.append(i*j)
+    
     max_util = max(exp_utility)
     return exp_utility.index(max_util)
 
 def util_of_each_action(response):
     utility_matrix = [[0,-1,1,-0.5],[1,0,-1,0.5],[-1,1,0,-0.5],[0.5,-0.5,0.5,0]]
-    return -1 * utility_matrix[response]
+    utilities = [element*-1 for element in utility_matrix[response]]
+    return utilities
+    
 
 def  convert_util_to_losses(utilities):
     losses = []
     for i in utilities:
         if i == 1:
             losses.append(0)
-        else if i == -1:
+        if i == -1:
             losses.append(1)
-        else if i == 0.5:
+        if i == 0.5:
             losses.append(0.5)
         else:
             losses.append(0.5)
     return losses
     
 def update_weights(weights, losses, epsilon):
-    
     for i in range(len((weights))):
         weights[i] = weights[i]*(1-epsilon*losses[i])
     return weights
 
 
 
-T = sys.srgv[1]
-epsilon = sys.argv[2]
+T = int(sys.argv[1])
+epsilon = float(sys.argv[2])
 weights = [1,1,1,1]
 list_of_probs = []
-for in in range(T):
+for i in range(T):
     probs = probs_from_weights(weights)
     list_of_probs.extend(probs)
     response = best_response(probs)
@@ -49,7 +52,7 @@ for in in range(T):
     losses = convert_util_to_losses(utilities)
     weights = update_weights(weights, losses, epsilon)
 
-return sum(list_of_probs)/len(list_of_probs)
+print( sum(list_of_probs)/len(list_of_probs))
 
 
 
